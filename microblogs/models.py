@@ -15,7 +15,6 @@ class User(AbstractUser):
             message = 'Username must consist of @ followed by at least three alphaneumericals'
         )]
     )
-
     first_name = models.CharField(max_length = 50, blank=False, unique = False)
     last_name = models.CharField(max_length = 50, blank=False, unique = False)
     email = models.EmailField(unique = True, blank = False)

@@ -1,0 +1,16 @@
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Clucker</title>
+  </head>
+  <body>
+    <h1>Sign up</h1>
+    <!╌ The CSRF token is for the server to authenticate the form.╌>
+    <form action="{% url 'sign_up' %}" method="post">
+      {% csrf_token %}
+      <!╌ The double curly brackets also is a tag but that allows to display a variable.╌>
+      {{ form.as_p }}
+      <input type = "submit" value="Sign up">
+    </form>
+  </body>
+</html>

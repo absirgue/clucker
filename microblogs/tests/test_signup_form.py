@@ -2,6 +2,7 @@ from django.test import TestCase
 from microblogs.models import User
 from microblogs.forms import SignUpForm
 from django import forms
+from django.contrib.auth.hashers import check_password
 
 """ Good practice to first list what we have to test. As such:
 - form acceptsa valid inputs data
@@ -73,3 +74,16 @@ class SignUpFormTestCase(TestCase):
         self.form_input['password_confirmation'] = 'BaDpWd'
         form = SignUpForm(data=self.form_input)
         self.assertFalse(form.is_valid())
+
+    def test_form_must_save_correctly(self):
+        form = SignUpForm(data=self.form_input)
+        before_count = User.objects.count()
+        form.save()
+        after_count = User.objects.count()
+        self.assertEqual(after_count,before_count + 1)
+        user = User.objects.get(username = "@janedoe")
+        self.assertEqual(user.first_name,"Jane")
+        self.assertEqual(user.last_name,"Doe")
+        self.assertEqual(user.email,"janedoe@example.com")
+        self.assertEqual(user.bio,"Hi, I'm Jane.")
+        self.assertTrue(check_password("Password123",user.password))

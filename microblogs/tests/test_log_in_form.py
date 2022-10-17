@@ -1,4 +1,44 @@
+"""Unit tests of the log in form."""
 from django.test import TestCase
+from django import forms
+from microblogs.forms import LogInForm
 
 class LogInFormTestCase(TestCase):
-    pass
+    """Unit tests of the log in form."""
+
+    def setUp(self):
+        self.form_input = {'username':'@janedoe', 'password':'Password123'}
+
+    def test_form_contains_required_fields(self):
+        form = LogInForm()
+        self.assertIn('username', form.fields)
+        self.assertIn('password', form.fields)
+        password_field = form.fields['password']
+        self.assertTrue(isinstance(password_field.widget,forms.PasswordInput))
+
+    def test_form_accepts_valid_input(self):
+        form = LogInForm(data=self.form_input)
+        self.assertTrue(form.is_valid())
+
+    def test_form_rejects_blank_username(self):
+        self.form_input['username'] = ''
+        form = LogInForm(data=self.form_input)
+        self.assertFalse(form.is_valid())
+
+    def test_form_rejects_blank_password(self):
+        self.form_input['password'] = ''
+        form = LogInForm(data=self.form_input)
+        self.assertFalse(form.is_valid())
+
+        # we decided to not say to the user if the username and password are not of the valid format, so form should not be marked as false
+    def test_form_accepts_incorrect_username(self):
+        self.form_input['username'] = 'BADUSERNAME'
+        form = LogInForm(data=self.form_input)
+        self.assertTrue(form.is_valid())
+
+    def test_form_accepts_incorrect_password(self):
+        self.form_input['password'] = 'badpwd'
+        form = LogInForm(data=self.form_input)
+        self.assertTrue(form.is_valid())
+
+    

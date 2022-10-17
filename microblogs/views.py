@@ -1,5 +1,5 @@
 from django.shortcuts import redirect,render
-from .forms import SignUpForm
+from .forms import LogInForm, SignUpForm
 from .models import User
 
 # The request is an object created by Django with all info on the HTTP request received.
@@ -21,4 +21,5 @@ def feed(request):
     return render(request, 'feed.html')
 
 def log_in(request):
-    return render(request, 'log_in.html')
+    form = LogInForm()
+    return render(request, 'log_in.html', {'form': form})

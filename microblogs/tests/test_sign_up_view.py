@@ -5,8 +5,9 @@ from microblogs.forms import SignUpForm
 from django.urls import reverse
 from microblogs.models import User
 from django.contrib.auth.hashers import check_password
+from .helper import LogInTester
 
-class SignUpViewTestCase(TestCase):
+class SignUpViewTestCase(TestCase,LogInTester):
 
     def setUp(self):
         # reverse will return the path as it is defined in the URL patern, we do that bcs we are not testing the URL is right here, we are testing the response, test for the URL is another test
@@ -43,6 +44,7 @@ class SignUpViewTestCase(TestCase):
         form = response.context['form']
         self.assertTrue(isinstance(form, SignUpForm))
         self.assertTrue(form.is_bound)
+        self.assertFalse(self._is_logged_in())
 
     def test_successful_sign_up(self):
         before_count = User.objects.count()
@@ -59,3 +61,4 @@ class SignUpViewTestCase(TestCase):
         self.assertEqual(user.bio, self.form_input['bio'])
         is_password_correct = check_password(self.form_input['new_password'],user.password)
         self.assertTrue(is_password_correct)
+        self.assertTrue(self._is_logged_in())

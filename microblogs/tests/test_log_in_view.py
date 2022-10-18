@@ -5,6 +5,7 @@ from microblogs.forms import LogInForm
 from django.urls import reverse
 from microblogs.models import User
 from .helper import LogInTester
+from django.contrib import messages
 
 class LogInViewTestCase(TestCase,LogInTester):
 
@@ -40,6 +41,9 @@ class LogInViewTestCase(TestCase,LogInTester):
         # In an unsuccessful log in screen, we want the form to not be bound so the user has to enter from scratch again
         self.assertFalse(form.is_bound)
         self.assertFalse(self._is_logged_in())
+        messages_list = list(response.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level,messages.ERROR)
 
     def test_successful_log_in(self):
         form_input = {

@@ -2,6 +2,7 @@ from django.shortcuts import redirect,render
 from django.contrib.auth import authenticate, login
 from .forms import LogInForm, SignUpForm
 from .models import User
+from django.contrib import messages
 
 # The request is an object created by Django with all info on the HTTP request received.
 # Django knows to go in the templates forlder to find home.html.
@@ -35,5 +36,7 @@ def log_in(request):
                 # Logging in the user effectively means creating the _auth_user_id variable in the client's session
                 login(request, user)
                 return redirect('feed')
+        # Add error message here bcs it corresponds to an incorrect LogIn
+        messages.add_message(request, messages.ERROR, "The credentials provided were invalid!")
     form = LogInForm()
     return render(request, 'log_in.html', {'form': form})

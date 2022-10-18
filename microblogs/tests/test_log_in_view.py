@@ -25,7 +25,7 @@ class LogInViewTestCase(TestCase,LogInTester):
         self.assertTrue(isinstance(form, LogInForm))
         self.assertFalse(form.is_bound)
 
-    def test_sign_up_url(self):
+    def test_log_in_url(self):
         self.assertEqual(self.url, '/log_in/')
 
     def test_unsuccessful_log_in(self):
